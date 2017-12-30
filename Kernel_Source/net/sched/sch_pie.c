@@ -36,6 +36,8 @@
 #define MAX_PROB  0xffffffff
 #define PIE_SCALE 8
 
+int madpie;
+
 /* parameters used */
 struct pie_params {
 	psched_time_t target;	/* user specified target delay in pschedtime */
@@ -263,6 +265,9 @@ static int pie_change(struct Qdisc *sch, struct nlattr *opt)
 	qdisc_tree_reduce_backlog(sch, qlen - sch->q.qlen, dropped);
 
 	sch_tree_unlock(sch);
+	
+	madpie = q->params.madpie;
+	
 	return 0;
 }
 
@@ -581,6 +586,7 @@ static struct Qdisc_ops pie_qdisc_ops __read_mostly = {
 
 static int __init pie_module_init(void)
 {
+	printk("inside init pie madpie = %d",madpie);
 	return register_qdisc(&pie_qdisc_ops);
 }
 
